@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>洛神1.0</title>
+    <link rel="stylesheet" type="text/css" href="./easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="./easyui/themes/icon.css">
+    <script type="text/javascript" src="./easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="./easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="./easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="./js/main.js?v=1.5"></script>
+    <script type="text/javascript" src="./js/v1.js?v=1.5"></script>
+</head>
+<body onload="firstLoad();">
+<div class="easyui-tabs" style="padding:0px;">
+	<div title="主/次钱包转账" style="padding:0px;">
+		<div class="easyui-layout" id="mainLayout" border="false">
+			<div id="topPanel" data-options="region:'north',split:false" title="主钱包">
+				<div style="padding:1px;background:#fafafa;border:1px solid #ccc">
+					<a id="refresh11" href="javascript:void(0)"  class="easyui-linkbutton" iconCls="icon-reload">刷新</a>
+					<a id="move11" href="javascript:void(0)"  class="easyui-linkbutton c1" iconCls="">已选主钱包移动到次钱包</a>
+					余额币种
+					<select id="coin_1" class="easyui-combobox" name="COIN"  editable="false" style="width:100px;">
+						<option value="ETH" selected="selected">ETH</option>
+					</select>
+					<a id="add_coin1" href="javascript:void(0)"  class="easyui-linkbutton c1" iconCls="">添加币种</a>
+					余额总计
+					<input id="balance1_id" class="easyui-textbox" type="text"  style="width:180px;" readOnly="readOnly" value=""  name="balance1" />
+					<a id="select1" href="javascript:void(0)"  class="easyui-linkbutton c1" iconCls="">行勾选</a>
+					开始行
+					<input id="select1_start" class="easyui-numberbox" type="text"  style="width:50px;"  value="1"  />
+					结束行
+					<input id="select1_end" class="easyui-numberbox" type="text"  style="width:50px;"  value="10"  />
+				</div>
+				<table id="t11" class="easyui-datagrid" style=""
+					   title="" iconCls="icon-save"
+					   data-options="rownumbers: true,
+				    singleSelect: false,
+				    remoteSort:false,
+				    checkOnSelect:true,
+				    remoteSort:false"
+						>
+					<thead>
+					<tr>
+						<th data-options="field:'ck',checkbox:true"><input type="checkbox" id="ckAll_11" name="DataGridCheckbox" /></th>
+						<th field="address" width="500px">钱包地址</th>
+						<th field="balance" width="200px" sortable="true" title="点击可排序" width="">余额</th>
+					</tr>
+					</thead>
+				</table>
+			</div>
+			<div id="centerPanel" data-options="region:'center',split:false" title="次钱包">
+				<div style="padding:1px;background:#fafafa;border:1px solid #ccc">
+					<a  id="refresh12" href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload">刷新</a>
+					<a id="move12" href="javascript:void(0)"  class="easyui-linkbutton c1" iconCls="">已选次钱包移动到主钱包</a>
+					余额币种
+					<select id="coin_2" class="easyui-combobox" name="COIN" editable="false"  style="width:100px;">
+						<option value="ETH" selected="selected">ETH</option>
+					</select>
+					<a id="add_coin2" href="javascript:void(0)"  class="easyui-linkbutton c1" iconCls="">添加币种</a>
+					余额总计
+					<input id="balance2_id" class="easyui-textbox" type="text"  style="width:180px;" readOnly="readOnly" value=""  name="balance2" />
+					<a id="select2" href="javascript:void(0)"  class="easyui-linkbutton c1" iconCls="">行勾选</a>
+					开始行
+					<input id="select2_start" class="easyui-numberbox" type="text"  style="width:50px;"  value="1"  />
+					结束行
+					<input id="select2_end" class="easyui-numberbox" type="text"  style="width:50px;"  value="10"  />
+				</div>
+				<table id="t12" class="easyui-datagrid" style=""
+					   title="" iconCls="icon-save"
+					   data-options="rownumbers: true,
+				    singleSelect: false,
+				    checkOnSelect:true,
+				    remoteSort:false
+				    "
+					>
+					<thead>
+					<tr>
+						<th data-options="field:'ck',checkbox:true"><input type="checkbox" id="ckAll_12" name="DataGridCheckbox" /></th>
+						<th field="address" width="500px">钱包地址</th>
+						<th field="balance" width="200px" sortable="true" title="点击可排序" width="">余额</th>
+					</tr>
+					</thead>
+				</table>
+			</div>
+			<div id="bottomPanel" data-options="region:'south',split:false" title="转账表单">
+				<div style="padding:5px 6px 2px 6px">
+					<form id="form1" method="post">
+						<table cellpadding="2">
+							<tr>
+								<td>转账类型:</td>
+								<td>
+									<span class="radioSpan">
+									<label>
+										<input type="radio" name="transType" value="3" checked="checked">已勾选主/次钱包对单一地址ETH/ERC20代币转账</input>
+									</label>
+									<label>
+										<input type="radio" name="transType" value="1" >已勾选主钱包对已勾选次钱包ETH转账</input>
+									</label>	
+									</span>
+								</td>
+							</tr>
+							<tr id="contract_tr" style="">
+								<td>币种选择:</td>
+								<td>
+									<!-- <input id="contract_id" class="easyui-textbox" type="text"  style="width:350px;"  name="contract" data-options="validType:'length[0,42]',required:false"/> -->
+									<select id="coin_3" class="easyui-combobox" name="coin" editable="false"  style="width:100px;">
+										<option value="ETH" selected="selected">ETH</option>
+									</select>
+									<a id="balance_btn" href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload">查询余额</a>
+									<input id="balance_id" class="easyui-textbox" type="text"  style="width:210px;" readOnly="readOnly" value=""  name="balance" />
+								</td>
+							</tr>
+							<tr>
+								<td>钱包密码:</td>
+								<td>
+									<input class="easyui-validatebox easyui-passwordbox" prompt="Password"  style="width:180px;" name="pwd" value="" data-options="required:true"/>
+								</td>
+							</tr>
+							<tr id="value_tr" style="display: none;">
+								<td>转账ETH金额:</td>
+								<td>
+									<input id="value_id" class="easyui-validatebox easyui-numberbox" type="text"  style="width:180px;" name="value" value="0"  data-options="validType:'number',min:0,precision:10,required:false"/>
+								</td>
+							</tr>
+							<tr id="value2_tr" style="" >
+								<td>转账金额:</td>
+								<td>
+									<!--<label>
+										<input type="radio" name="numType" value="1" checked="checked">指定金额</input>
+									</label>
+									<label>
+										<input type="radio" name="numType" value="2">全部转出</input>
+									</label>-->
+									<input id="numType_id" class="easyui-switchbutton" onText="全部余额" offText="指定金额" style="width:100px;" name="tmpNumType">
+									<!--<input  class="" type="checkbox" id="numType" name="numType"  />-->
+									<input id="value2_id" class="easyui-validatebox easyui-numberbox" type="text" style="width:300px;" name="value2" value="0"  data-options="validType:'number',min:0,precision:10,required:false"/>
+
+								</td>
+							</tr>
+							<tr>
+								<td>gasPrice(gwei):</td>
+								<td><input id="gasprice_item_id" class="easyui-validatebox easyui-numberbox" type="text"  style="width:180px;" name="gasPrice" value="10"  data-options="validType:'number',min:0.001,max:100,precision:3,required:true"/>
+									<a id="gasprice_btn" href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-reload">当前网络gasPrice</a>
+									<input id="gasprice_id" class="easyui-textbox" type="text"  style="width:70px;" readOnly="readOnly" value=""  />
+								</td>
+							</tr>
+							<tr>
+								<td>gasLimit:</td>
+								<td><input class="easyui-validatebox easyui-numberbox" type="text"  style="width:400px;" name="gasLimit" value="100000" data-options="validType:'number',min:10000,max:90000000,precision:0,required:true" /></td>
+							</tr>
+							<tr id="address_tr" style="">
+								<td>收款钱包地址:</td>
+							<td><input id="address_id" class="easyui-textbox" type="text"  style="width:400px;"  name="address" data-options="validType:'length[0,42]',required:false"/></td>
+							</tr>
+
+						</table>
+						<div style="text-align:left;padding:1px">
+							<input id="from_id1"type="hidden" name="from" value=""/>
+							<input id="to_id1"type="hidden" name="to" value=""/>
+							<input id="num_type_id"type="hidden" name="numType" value="1"/>
+							<input type="submit" value="确认转账"/>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+
+	<div title="创建/导入钱包" iconCls="" closable="false" style="padding:10px;">
+		<div style="padding:5px 6px 2px 6px">
+			<form id="form2" method="post">
+				<table cellpadding="2">
+					<tr>
+						<td>钱包类别:</td>
+						<td>
+							<span class="radioSpan">
+								<label>
+									<input type="radio" name="walletType" value="1" checked="checked">主钱包</input>
+								</label>
+								<label>
+									<input type="radio" name="walletType" value="2">次钱包</input>
+								</label>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td>创建/导入方式:</td>
+						<td>
+							<span class="radioSpan">
+								<label>
+									<input type="radio" name="createType" value="1" checked="checked">全新创建</input>
+								</label>
+								<label>
+									<input type="radio" name="createType" value="2">keystore导入</input>
+								</label>
+								<label>
+								<input type="radio" name="createType" value="3">私钥导入</input>
+								</label>
+							</span>
+						</td>
+					</tr>
+					<tr  id="count_tr" >
+						<td>创建数量:</td>
+						<td>
+							<input id="count_id" class="easyui-validatebox easyui-numberbox" type="text" name="count" value="10"  data-options="validType:'number',min:1,max:100,precision:0,required:false"/>
+						</td>
+					</tr>
+					<tr id="pwd_tr" >
+						<td>钱包密码:</td>
+						<td>
+							<input id="pwd_id" class="easyui-validatebox easyui-passwordbox" prompt="Password" name="pwd" value="" data-options="required:false"/>
+						</td>
+					</tr>
+					<tr id="repassword_tr" >
+						<td>确认密码:</td>
+						<td>
+							<input id="repassword"  class="easyui-validatebox easyui-passwordbox" prompt="Password" name="repassword"  value="" data-options="required:false"  />
+						</td>
+					</tr>
+					<tr id="keystore_tr" style="display: none;">
+						<td>keystore文本:</td>
+						<td><input id="keystore_id" class="easyui-textbox" type="text"  style="width:600px;"  name="keystore" data-options=""/></td>
+					</tr>
+					<tr id="privatekey_tr" style="display: none;">
+						<td>地址私钥对:</td>
+						<td><input id="privatekey_id" class="easyui-textbox" type="text"  style="width:600px;"  name="privatekey" data-options=""/></td>
+					</tr>
+					<tr id="privatekey_desc" style="display: none;">
+						<td>说明:</td>
+						<td>支持无限多组地址私钥对，格式为=>钱包地址1:私钥1|钱包地址2:私钥2</td>
+					</tr>
+				</table>
+				<div style="text-align:left;padding:1px">
+					<input type="submit" value="确认提交"/>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div title="帮助" iconCls="" closable="false" style="padding:10px;">
+		<div style="padding:5px 6px 2px 6px">
+			第一次使用时请提供机器公钥给我们,获取正版授权文件。
+			<input id="pubKey" type="button" value="获取机器公钥"/>
+		</div>
+	</div>
+</div>
+
+<div id="window" class="easyui-window" title="执行结果信息" data-options="iconCls:'icon-save',modal:true" style="width:500px;height:200px;padding:10px;">
+	<div id="window_div" ></div>
+	<table id="window_table" class="easyui-datagrid" style=""
+		   title="" iconCls="icon-save"
+		   data-options="rownumbers: true,
+				    singleSelect: true,
+				    checkOnSelect:true"
+			>
+		<thead>
+		<tr>
+			<th field="transactionHash" width="100%">交易hash值</th>
+		</tr>
+		</thead>
+	</table>
+</div>
+
+
+<div id="window2" class="easyui-window" title="执行结果信息" data-options="iconCls:'icon-save',modal:true" style="width:600px;height:400px;padding:10px;">
+	<div id="window2_div" ></div>
+	<table id="window2_table" class="easyui-datagrid" style=""
+		   title="" iconCls="icon-save"
+		   data-options="rownumbers: true,
+				    singleSelect: true,
+				    checkOnSelect:true"
+			>
+		<thead>
+		<tr>
+			<th field="address" style="width:600px;">钱包地址</th>
+		</tr>
+		</thead>
+	</table>
+</div>
+<div id="window3" class="easyui-window" title="执行结果信息" data-options="iconCls:'icon-save',modal:true" style="width:800px;height:400px;padding:2px;">
+	<div id="window3_div" ></div>
+	<table id="window3_table" class="easyui-datagrid" style="padding:2px;"
+		   title="" iconCls="icon-save"
+		   data-options="rownumbers: true,
+				    singleSelect: true,
+				    checkOnSelect:true"
+			>
+		<thead>
+		<tr>
+			<th field="fromAddress" width="70%">转出地址</th>
+			<th field="transactionHash" width="90%">交易hash值</th>
+			<th field="msg" width="50%">执行结果</th>
+		</tr>
+		</thead>
+	</table>
+</div>
+
+<div id="window4" class="easyui-window" title="执行结果信息" data-options="iconCls:'icon-save',modal:true" style="width:600px;height:200px;padding:10px;">
+	<div id="window4_div" ></div>
+</div>
+<div id="window5" class="easyui-window" title="添加代币" data-options="iconCls:'icon-save',modal:true" style="width:600px;height:200px;padding:10px;">
+	<div style="padding:5px 6px 2px 6px">
+		<form id="form5" method="post">
+			<table cellpadding="2">
+				<tr id="contract_add_tr" style="">
+					<td>代币合约地址:</td>
+					<td><input id="contract_add_id" class="easyui-textbox" type="text"  style="width:350px;"  name="address" data-options="validType:'length[42,42]',required:true"/></td>
+				</tr>
+			</table>
+			<div style="text-align:left;padding:1px">
+				<input type="submit" value="确认添加"/>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	window.customResize = function () {
+		var width = $(window).width() - 10;
+		var height = $(window).height();
+		var panelHeight = parseInt(height / 3); //每个1/3高度
+		$('#topPanel').panel('resize', { width: width, height: panelHeight });
+		$('#centerPanel').panel('resize', { width: width, height: panelHeight });
+		$('#bottomPanel').panel('resize', { width: width, height: panelHeight });
+		$('#mainLayout').layout('resize', { width: width, height: height });
+	};
+
+</script>
+<script type="text/javascript">
+	//窗口缩放时，重绘布局控件尺寸
+	$(function () {
+		redraw();
+
+	});
+
+	$(window).resize(function () {
+		redraw();
+
+	});
+
+	function redraw() {
+		if (window.customResize) {
+			customResize(); //自定义缩放函数，页面若使用多个布局控件，需自定义缩放函数处理
+		} else {
+			var width = $(window).width();
+			var height = $(window).height();
+
+			//没有自定义缩放函数时，默认对panel，layout，treegrid，datagrid等控件进行调整
+			$('.easyui-panel').panel('resize', { width: width, height: height });
+			$('.easyui-layout').layout('resize', { width: width, height: height });
+			$('.easyui-datagrid').datagrid('resize', { width: width, height: height });
+		}
+	}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+server:
+#server
+  port: 9101
+  tomcat:
+     uri-encoding: UTF-8
+
+spring:
+  #datasource
+  datasource:
+    name: customer
+
+    url: jdbc:mysql://localhost:3306/adam?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+    
+    maxActive: 200
+    initialSize: 2
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+
+    
+  #http  
+  http:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+  #jackson
+  jackson: 
+    date-format: yyyy-MM-dd HH:mm:ss
+    timeZone: GMT+8
+  
+ #redis 
+  redis: 
+    host: 1127.0.0.1
+    password: aaaa
+    port: 6379
+    pool:
+      max-idle: 8
+      min-idle: 0
+      max-active: 8
+      max-wait: -1
+
+#loggin
+logging:
+  level:
+    org:
+    mybatis: debug
+    dao: debug
+  
+  
+interface:
+  msgType: 1 #1 test 2 正式
+  mqType: 1 #1 test 2 正式
+  
+action:
+  ipPath: /ip/ip.txt
+  web3jHost: https://mainnet.infura.io/v3
+  transFlag: 2
+  rootDir: wu # E:/lulu c:/lulu  wu
+  master: /eth/master
+  slave: /eth/slave
+  toOne: /result/to-one
+  toMany: /result/to-many.txt
+  erc20: /result/erc20
+  xiongmao: secret=9c18b034499766f929b9e22f311111&orderNo=GL20180517171122Fts11111&isTxt=0
